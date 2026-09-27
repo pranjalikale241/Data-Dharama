@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Data Dharma | Dashboard</title>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f5f7fb;
+            color: #1f2937;
+        }
+
+        /* SIDEBAR */
+
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 245px;
+            height: 100vh;
+            background: #111827;
+            color: white;
+            padding: 25px 18px;
+        }
+
+        .brand {
+            font-size: 23px;
+            font-weight: bold;
+            margin-bottom: 35px;
+            padding-left: 10px;
+        }
+
+        .brand span {
+            color: #60a5fa;
+        }
+
+        .menu {
+            list-style: none;
+        }
+
+        .menu li {
+            margin-bottom: 8px;
+        }
+
+        .menu a {
+            display: block;
+            text-decoration: none;
+            color: #d1d5db;
+            padding: 12px 14px;
+            border-radius: 10px;
+            transition: 0.2s;
+        }
+
+        .menu a:hover,
+        .menu a.active {
+            background: #2563eb;
+            color: white;
+        }
+
+        .logout {
+            position: absolute;
+            bottom: 25px;
+            left: 18px;
+            right: 18px;
+        }
+
+        .logout a {
+            display: block;
+            text-align: center;
+            text-decoration: none;
+            background: #374151;
+            color: white;
+            padding: 11px;
+            border-radius: 10px;
+        }
+
+        .logout a:hover {
+            background: #dc2626;
+        }
+
+        /* MAIN */
+
+        .main {
+            margin-left: 245px;
+            padding: 35px;
+        }
+
+        /* HEADER */
+
+        .top-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .welcome h1 {
+            font-size: 32px;
+            margin-bottom: 7px;
+        }
+
+        .welcome p {
+            color: #6b7280;
+        }
+
+        .profile-button {
+            text-decoration: none;
+            background: white;
+            color: #1f2937;
+            padding: 11px 17px;
+            border-radius: 10px;
+            border: 1px solid #e5e7eb;
+            font-weight: bold;
+        }
+
+        .profile-button:hover {
+            border-color: #2563eb;
+            color: #2563eb;
+        }
+
+        /* PRIVACY BANNER */
+
+        .privacy-banner {
+            background: #eff6ff;
+            border-left: 5px solid #2563eb;
+            padding: 18px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            line-height: 1.6;
+        }
+
+        /* STATUS */
+
+        .system-status {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: white;
+            border-radius: 12px;
+            padding: 15px 18px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
+        }
+
+        .status-dot {
+            width: 11px;
+            height: 11px;
+            background: #22c55e;
+            border-radius: 50%;
+        }
+
+        .status-text {
+            font-weight: bold;
+        }
+
+        .status-subtext {
+            color: #6b7280;
+            font-size: 13px;
+        }
+
+        /* STATS */
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 18px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 15px;
+            padding: 22px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .stat-icon {
+            font-size: 27px;
+            margin-bottom: 12px;
+        }
+
+        .stat-number {
+            font-size: 29px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            color: #6b7280;
+            font-size: 14px;
+        }
+
+        /* SECTION */
+
+        .section-title {
+            font-size: 23px;
+            margin-bottom: 17px;
+        }
+
+        /* FEATURE CARDS */
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 18px;
+            margin-bottom: 30px;
+        }
+
+        .feature-card {
+            background: white;
+            border-radius: 15px;
+            padding: 22px;
+            text-decoration: none;
+            color: #1f2937;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            transition: 0.2s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 7px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .feature-icon {
+            font-size: 30px;
+            margin-bottom: 15px;
+        }
+
+        .feature-card h3 {
+            margin-bottom: 8px;
+            font-size: 18px;
+        }
+
+        .feature-card p {
+            color: #6b7280;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        /* ABOUT */
+
+        .about {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            line-height: 1.7;
+            margin-bottom: 25px;
+        }
+
+        .about h2 {
+            margin-bottom: 10px;
+        }
+
+        .about p {
+            color: #6b7280;
+        }
+
+        /* FOOTER */
+
+        .footer {
+            text-align: center;
+            color: #9ca3af;
+            font-size: 13px;
+            padding: 15px;
+        }
+
+        /* RESPONSIVE */
+
+        @media (max-width: 1100px) {
+
+            .stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .features {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+        }
+
+        @media (max-width: 800px) {
+
+            .sidebar {
+                position: relative;
+                width: 100%;
+                height: auto;
+            }
+
+            .logout {
+                position: relative;
+                left: auto;
+                right: auto;
+                bottom: auto;
+                margin-top: 20px;
+            }
+
+            .main {
+                margin-left: 0;
+                padding: 20px;
+            }
+
+            .top-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+
+        }
+
+        @media (max-width: 550px) {
+
+            .stats,
+            .features {
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <!-- SIDEBAR -->
+
+    <div class="sidebar">
+
+        <div class="brand">
+            Data <span>Dharma</span>
+        </div>
+
+        <ul class="menu">
+
+            <li>
+                <a href="/" class="active">
+                    🏠 Dashboard
+                </a>
+            </li>
+
+            {% if session.get('role') == 'owner' %}
+
+                <li>
+                    <a href="/vault">
+                        🔐 Data Vault
+                    </a>
+                </li>
+
+                <li>
+                    <a href="/access-requests">
+                        📩 Access Requests
+                    </a>
+                </li>
+
+                <li>
+                    <a href="/risk-analysis">
+                        🤖 Risk Analysis
+                    </a>
+                </li>
+
+                <li>
+                    <a href="/activity">
+                        📊 Activity
+                    </a>
+                </li>
+
+            {% else %}
+
+                <li>
+                    <a href="/search-owners">
+                        🔎 Search Data Owners
+                    </a>
+                </li>
+
+                <li>
+                    <a href="/access-requests">
+                        📩 My Requests
+                    </a>
+                </li>
+
+                <li>
+                    <a href="/activity">
+                        📊 Activity
+                    </a>
+                </li>
+
+            {% endif %}
+
+        </ul>
+
+        <div class="logout">
+
+            <a href="/logout">
+                🚪 Logout
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- MAIN -->
+
+    <div class="main">
+
+        <!-- HEADER -->
+
+        <div class="top-header">
+
+            <div class="welcome">
+
+                <h1>
+                    Welcome, @{{ session.get('username') }} 👋
+                </h1>
+
+                <p>
+                    {% if session.get('role') == 'owner' %}
+                        Manage your personal data and control who can access it.
+                    {% else %}
+                        Find Data Owners and manage your document access requests.
+                    {% endif %}
+                </p>
+
+            </div>
+
+
+            <a
+                href="/profile/{{ session.get('username') }}"
+                class="profile-button"
+            >
+                👤 My Profile
+            </a>
+
+        </div>
+
+
+        <!-- PRIVACY BANNER -->
+
+        <div class="privacy-banner">
+
+            🔒 <strong>Privacy First:</strong>
+
+            Data Dharma gives individuals control over their personal
+            information. Documents are shared only after explicit
+            authorization and access automatically expires when the
+            approved duration ends.
+
+        </div>
+
+
+        <!-- SYSTEM STATUS -->
+
+        <div class="system-status">
+
+            <div class="status-dot"></div>
+
+            <div>
+
+                <div class="status-text">
+                    System Status: All Privacy Controls Active
+                </div>
+
+                <div class="status-subtext">
+                    Authentication, access control and automatic expiry
+                    are enabled.
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- STATISTICS -->
+
+        <div class="stats">
+
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+                    {% if session.get('role') == 'owner' %}
+                        📄
+                    {% else %}
+                        🔓
+                    {% endif %}
+                </div>
+
+                <div class="stat-number">
+                    {{ document_count }}
+                </div>
+
+                <div class="stat-label">
+
+                    {% if session.get('role') == 'owner' %}
+                        Documents in Vault
+                    {% else %}
+                        Accessible Documents
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+                    ⏳
+                </div>
+
+                <div class="stat-number">
+                    {{ pending_count }}
+                </div>
+
+                <div class="stat-label">
+
+                    {% if session.get('role') == 'owner' %}
+                        Pending Requests
+                    {% else %}
+                        Pending My Requests
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+                    ✅
+                </div>
+
+                <div class="stat-number">
+                    {{ approved_count }}
+                </div>
+
+                <div class="stat-label">
+
+                    {% if session.get('role') == 'owner' %}
+                        Active Approvals
+                    {% else %}
+                        Approved Requests
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+                    📊
+                </div>
+
+                <div class="stat-number">
+                    {{ activity_count }}
+                </div>
+
+                <div class="stat-label">
+                    Activity Logs
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- FEATURES -->
+
+        {% if session.get('role') == 'owner' %}
+
+            <h2 class="section-title">
+                🛡️ Privacy Controls
+            </h2>
+
+            <div class="features">
+
+
+                <a
+                    href="/vault"
+                    class="feature-card"
+                >
+
+                    <div class="feature-icon">
+                        🔐
+                    </div>
+
+                    <h3>
+                        My Data Vault
+                    </h3>
+
+                    <p>
+                        Securely upload and manage your personal
+                        documents.
+                    </p>
+
+                </a>
+
+
+                <a
+                    href="/access-requests"
+                    class="feature-card"
+                >
+
+                    <div class="feature-icon">
+                        📩
+                    </div>
+
+                    <h3>
+                        Access Requests
+                    </h3>
+
+                    <p>
+                        Review, approve, reject or revoke
+                        organization access.
+                    </p>
+
+                </a>
+
+
+                <a
+                    href="/risk-analysis"
+                    class="feature-card"
+                >
+
+                    <div class="feature-icon">
+                        🤖
+                    </div>
+
+                    <h3>
+                        Privacy Risk Analysis
+                    </h3>
+
+                    <p>
+                        Use the AI-assisted prototype to understand
+                        the risk of an access scenario.
+                    </p>
+
+                </a>
+
+
+                <a
+                    href="/activity"
+                    class="feature-card"
+                >
+
+                    <div class="feature-icon">
+                        📊
+                    </div>
+
+                    <h3>
+                        Activity History
+                    </h3>
+
+                    <p>
+                        Review actions and access-related events
+                        recorded by the system.
+                    </p>
+
+                </a>
+
+            </div>
+
+        {% else %}
+
+            <h2 class="section-title">
+                🔎 Data Access
+            </h2>
+
+            <div class="features">
+
+
+                <a
+                    href="/search-owners"
+                    class="feature-card"
+                >
+
+                    <div class="feature-icon">
+                        🔎
+                    </div>
+
+                    <h3>
+                        Search Data Owners
+                    </h3>
+
+                    <p>
+                        Find registered Data Owners and view their
+                        available document information.
+                    </p>
+
+                </a>
+
+
+                <a
+                    href="/access-requests"
+                    class="feature-card"
+                >
+
+                    <div class="feature-icon">
+                        📤
+                    </div>
+
+                    <h3>
+                        Request Document Access
+                    </h3>
+
+                    <p>
+                        Submit a request specifying purpose,
+                        permission and access duration.
+                    </p>
+
+                </a>
+
+
+                <a
+                    href="/access-requests"
+                    class="feature-card"
+                >
+
+                    <div class="feature-icon">
+ 📋
+                    </div>
+
+                    <h3>
+                        My Requests
+                    </h3>
+
+                    <p>
+                        Track pending, approved, rejected,
+                        revoked and expired requests.
+                    </p>
+
+                </a>
+
+
+                <a
+                    href="/activity"
+                    class="feature-card"
+                >
+
+                    <div class="feature-icon">
+                        📊
+                    </div>
+
+                    <h3>
+                        Activity History
+                    </h3>
+
+                    <p>
+                        View recorded activity associated with
+                        your Data Dharma account.
+                    </p>
+
+                </a>
+
+            </div>
+
+        {% endif %}
+
+
+        <!-- ABOUT -->
+
+        <div class="about">
+
+            <h2>
+                🌱 About Data Dharma
+            </h2>
+
+            <p>
+
+                <strong>Data Dharma</strong> is a privacy-first,
+                AI-assisted personal data vault and digital identity
+                platform.
+
+                It allows Data Owners to store documents securely
+                and maintain control over how organizations access
+                them.
+
+                Organizations can request access for a specific
+                purpose, permission level and duration.
+
+                The Data Owner remains in control of the final
+                authorization decision, while automatic expiry
+                limits access to the approved time period.
+
+            </p>
+
+        </div>
+
+
+        <!-- FOOTER -->
+
+        <div class="footer">
+
+            Data Dharma • Community Engagement Project • SDG 16
+
+        </div>
+
+    </div>
+
+</body>
+
+</html>

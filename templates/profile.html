@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Data Dharma | Data Owner Profile</title>
+
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+    >
+
+    <style>
+
+        body {
+            background-color: #f4f7fb;
+            font-family: "Segoe UI", sans-serif;
+        }
+
+        .profile-card {
+            border: none;
+            border-radius: 22px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+        }
+
+        .profile-header {
+            background: linear-gradient(135deg, #0d6efd, #6610f2);
+            color: white;
+            border-radius: 22px 22px 0 0;
+        }
+
+        .profile-icon {
+            font-size: 65px;
+        }
+
+        .document-card {
+            border: none;
+            border-radius: 18px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.07);
+            transition: 0.2s;
+        }
+
+        .document-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 22px rgba(0,0,0,0.10);
+        }
+
+        .document-icon {
+            font-size: 40px;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="container py-5">
+
+    <!-- ================= PROFILE ================= -->
+
+    <div class="card profile-card mb-5">
+
+        <div class="profile-header p-5 text-center">
+
+            <div class="profile-icon mb-3">
+                👤
+            </div>
+
+            <h1 class="fw-bold">
+                @{{ owner[1] }}
+            </h1>
+
+            <p class="mb-0">
+                Data Owner
+            </p>
+
+        </div>
+
+
+        <div class="card-body p-5">
+
+            <h4 class="fw-bold">
+                🛡️ Privacy Profile
+            </h4>
+
+            <p class="text-muted">
+                This user is a registered Data Owner on Data Dharma.
+                Organizations can request access to documents owned
+                by this account.
+            </p>
+
+
+            <hr class="my-4">
+
+
+            <div class="row">
+
+                <div class="col-md-6">
+
+                    <h6 class="text-muted">
+                        Username
+                    </h6>
+
+                    <p class="fw-bold">
+                        @{{ owner[1] }}
+                    </p>
+
+                </div>
+
+
+                <div class="col-md-6">
+
+                    <h6 class="text-muted">
+                        Account Type
+                    </h6>
+
+                    <p class="fw-bold">
+                        {{ owner[2] | capitalize }}
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================= DOCUMENTS ================= -->
+
+    <div class="mb-4">
+
+        <h2 class="fw-bold">
+            📂 Available Documents
+        </h2>
+
+        <p class="text-muted">
+            Documents available in this Data Owner's vault.
+        </p>
+
+    </div>
+
+
+    <div class="row g-4">
+
+        {% if documents %}
+
+            {% for document in documents %}
+
+                <div class="col-md-6 col-lg-4">
+
+                    <div class="card document-card h-100">
+
+                        <div class="card-body p-4">
+
+                            <div class="document-icon mb-3">
+                                📄
+                            </div>
+
+                            <h5 class="fw-bold">
+                                {{ document[1] }}
+                            </h5>
+
+                            <p class="text-muted mb-4">
+                                Type: {{ document[2] }}
+                            </p>
+
+                            <a
+    href="/access-requests?owner={{ owner[1] | urlencode }}&document={{ document[0] }}"
+    class="btn btn-primary w-100"
+>
+    🔐 Request Access
+</a>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            {% endfor %}
+
+        {% else %}
+
+            <div class="col-12">
+
+                <div class="alert alert-info rounded-4">
+
+                    📭 No documents have been uploaded yet.
+
+                </div>
+
+            </div>
+
+        {% endif %}
+
+    </div>
+
+
+    <!-- ================= BACK ================= -->
+
+    <div class="mt-5">
+
+        <a href="/" class="btn btn-outline-primary">
+            🏠 Back to Dashboard
+        </a>
+
+    </div>
+
+</div>
+
+</body>
+</html>

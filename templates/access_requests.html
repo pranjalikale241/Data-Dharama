@@ -1,0 +1,1083 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Access Requests | Data Dharma</title>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f5f7fb;
+            color: #1f2937;
+        }
+
+        /* SIDEBAR */
+
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 245px;
+            height: 100vh;
+            background: #111827;
+            color: white;
+            padding: 25px 18px;
+        }
+
+        .brand {
+            font-size: 23px;
+            font-weight: bold;
+            margin-bottom: 35px;
+            padding-left: 10px;
+        }
+
+        .brand span {
+            color: #60a5fa;
+        }
+
+        .menu {
+            list-style: none;
+        }
+
+        .menu li {
+            margin-bottom: 8px;
+        }
+
+        .menu a {
+            display: block;
+            text-decoration: none;
+            color: #d1d5db;
+            padding: 12px 14px;
+            border-radius: 10px;
+            transition: 0.2s;
+        }
+
+        .menu a:hover,
+        .menu a.active {
+            background: #2563eb;
+            color: white;
+        }
+
+        .logout {
+            position: absolute;
+            bottom: 25px;
+            left: 18px;
+            right: 18px;
+        }
+
+        .logout a {
+            display: block;
+            text-align: center;
+            text-decoration: none;
+            background: #374151;
+            color: white;
+            padding: 11px;
+            border-radius: 10px;
+        }
+
+        .logout a:hover {
+            background: #dc2626;
+        }
+
+        /* MAIN */
+
+        .main {
+            margin-left: 245px;
+            padding: 35px;
+        }
+
+        .header {
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 32px;
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            color: #6b7280;
+        }
+
+        /* CARD */
+
+        .card {
+            background: white;
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .card h2 {
+            margin-bottom: 8px;
+        }
+
+        .description {
+            color: #6b7280;
+            margin-bottom: 22px;
+        }
+
+        /* FORM */
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        input,
+        select,
+        textarea {
+            width: 100%;
+            padding: 12px 14px;
+            border: 1px solid #d1d5db;
+            border-radius: 9px;
+            font-size: 15px;
+            background: white;
+        }
+
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #2563eb;
+        }
+
+        .request-button {
+            border: none;
+            background: #2563eb;
+            color: white;
+            padding: 13px 24px;
+            border-radius: 9px;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .request-button:hover {
+            background: #1d4ed8;
+        }
+
+        /* INFO */
+
+        .info-box {
+            background: #eff6ff;
+            border-left: 4px solid #2563eb;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 22px;
+            color: #374151;
+        }
+
+        .warning-box {
+            background: #fff7ed;
+            border-left: 4px solid #f97316;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 22px;
+            color: #7c2d12;
+        }
+
+        /* REQUEST TABLE */
+
+        .table-container {
+            overflow-x: auto;
+        }
+
+        .request-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .request-table th,
+        .request-table td {
+            padding: 14px 12px;
+            text-align: left;
+            border-bottom: 1px solid #e5e7eb;
+            vertical-align: middle;
+        }
+
+        .request-table th {
+            background: #f9fafb;
+            font-size: 14px;
+        }
+
+        .request-table td {
+            font-size: 14px;
+        }
+
+        /* STATUS */
+
+        .status {
+            display: inline-block;
+            padding: 6px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .pending {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .approved {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .rejected {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .revoked {
+            background: #e5e7eb;
+            color: #374151;
+        }
+
+        .expired {
+            background: #f3e8ff;
+            color: #6b21a8;
+        }
+
+        /* ACTION BUTTONS */
+
+        .action-form {
+            display: inline-block;
+            margin: 2px;
+        }
+
+        .action-button {
+            border: none;
+            padding: 7px 11px;
+            border-radius: 7px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .approve {
+            background: #16a34a;
+            color: white;
+        }
+
+        .approve:hover {
+            background: #15803d;
+        }
+
+        .reject {
+            background: #dc2626;
+            color: white;
+        }
+
+        .reject:hover {
+            background: #b91c1c;
+        }
+
+        .revoke {
+            background: #6b7280;
+            color: white;
+        }
+
+        .revoke:hover {
+            background: #4b5563;
+        }
+
+        .open-button {
+            display: inline-block;
+            text-decoration: none;
+            background: #2563eb;
+            color: white;
+            padding: 7px 11px;
+            border-radius: 7px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .open-button:hover {
+            background: #1d4ed8;
+        }
+
+        /* EMPTY */
+
+        .empty {
+            text-align: center;
+            padding: 40px;
+            color: #6b7280;
+        }
+
+        .empty-icon {
+            font-size: 42px;
+            margin-bottom: 10px;
+        }
+
+        /* MOBILE */
+
+        @media (max-width: 800px) {
+
+            .sidebar {
+                position: relative;
+                width: 100%;
+                height: auto;
+            }
+
+            .logout {
+                position: relative;
+                left: auto;
+                right: auto;
+                bottom: auto;
+                margin-top: 20px;
+            }
+
+            .main {
+                margin-left: 0;
+                padding: 20px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <!-- SIDEBAR -->
+
+    <div class="sidebar">
+
+        <div class="brand">
+            Data <span>Dharma</span>
+        </div>
+
+        <ul class="menu">
+
+            <li>
+                <a href="/">
+                    🏠 Dashboard
+                </a>
+            </li>
+
+            {% if session.get('role') == 'owner' %}
+
+                <li>
+                    <a href="/vault">
+                        🔐 Data Vault
+                    </a>
+                </li>
+
+                <li>
+                    <a href="/access-requests" class="active">
+                        📩 Access Requests
+                    </a>
+                </li>
+
+                <li>
+                    <a href="/risk-analysis">
+                        🤖 Risk Analysis
+                    </a>
+                </li>
+
+                <li>
+                    <a href="/activity">
+                        📊 Activity
+                    </a>
+                </li>
+
+            {% else %}
+
+                <li>
+                    <a href="/search-owners">
+                        🔎 Search Data Owners
+                    </a>
+                </li>
+
+                <li>
+                    <a href="/access-requests" class="active">
+                        📩 My Requests
+                    </a>
+                </li>
+
+                <li>
+                    <a href="/activity">
+                        📊 Activity
+                    </a>
+                </li>
+
+            {% endif %}
+
+        </ul>
+
+        <div class="logout">
+
+            <a href="/logout">
+                🚪 Logout
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- MAIN -->
+
+    <div class="main">
+
+        <div class="header">
+
+            {% if session.get('role') == 'owner' %}
+
+                <h1>📩 Access Requests</h1>
+
+                <p>
+                    Review and control organizations requesting access
+                    to your personal documents.
+                </p>
+
+            {% else %}
+
+                <h1>📩 Request Document Access</h1>
+
+                <p>
+                    Request temporary access to documents owned by
+                    Data Owners.
+                </p>
+
+            {% endif %}
+
+        </div>
+
+
+        <!-- ORGANIZATION REQUEST FORM -->
+
+        {% if session.get('role') == 'organization' %}
+
+        <div class="card">
+
+            <h2>🔐 Create Access Request</h2>
+
+            <p class="description">
+                Select a Data Owner and one of their documents,
+                then specify how the document should be accessed.
+            </p>
+
+            <div class="info-box">
+
+                🔒 <strong>Privacy by Design:</strong>
+
+                The Data Owner always makes the final decision.
+                AI-based risk analysis is used only as a decision-support
+                mechanism.
+
+            </div>
+
+
+            {% if not owners %}
+
+                <div class="warning-box">
+
+                    No Data Owners are currently registered.
+
+                    Please register a Data Owner account first.
+
+                </div>
+
+            {% endif %}
+
+
+            {% if not documents %}
+
+                <div class="warning-box">
+
+                    No documents are currently available from Data Owners.
+
+                </div>
+
+            {% endif %}
+
+
+            <form
+                method="POST"
+                action="/access-requests"
+            >
+
+                <!-- OWNER -->
+
+                <div class="form-group">
+
+                    <label for="owner_id">
+                        Data Owner
+                    </label>
+
+                    <select
+                        id="owner_id"
+                        name="owner_id"
+                        required
+                    >
+
+                        <option value="">
+                            Select Data Owner
+                        </option>
+
+                        {% for owner in owners %}
+
+                            <option value="{{ owner[0] }}">
+                                @{{ owner[1] }}
+                            </option>
+
+                        {% endfor %}
+
+                    </select>
+
+                </div>
+
+
+                <!-- DOCUMENT -->
+
+                <div class="form-group">
+
+                    <label for="document_id">
+                        Document
+                    </label>
+
+                    <select
+                        id="document_id"
+                        name="document_id"
+                        required
+                    >
+
+                        <option value="">
+                            Select Document
+                        </option>
+
+                        {% for document in documents %}
+
+                            <option
+                                value="{{ document[0] }}"
+                                data-owner="{{ document[3] }}"
+                            >
+                                {{ document[1] }} — {{ document[2] }}
+                            </option>
+
+                        {% endfor %}
+
+                    </select>
+
+                </div>
+
+
+                <!-- PURPOSE -->
+
+                <div class="form-group">
+
+                    <label for="purpose">
+                        Purpose of Access
+                    </label>
+
+                    <textarea
+                        id="purpose"
+                        name="purpose"
+                        placeholder="Explain why you need access to this document..."
+                        required
+                    ></textarea>
+
+                </div>
+
+
+                <!-- PERMISSION -->
+
+                <div class="form-group">
+
+                    <label for="permission">
+                        Permission Level
+                    </label>
+
+                    <select
+                        id="permission"
+                        name="permission"
+                        required
+                    >
+
+                        <option value="">
+                            Select Permission
+                        </option>
+
+                        <option value="View Only">
+                            👁 View Only
+                        </option>
+
+                        <option value="Download">
+                            ⬇ Download
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- DURATION -->
+
+                <div class="form-group">
+
+                    <label for="duration">
+                        Access Duration
+                    </label>
+
+                    <select
+                        id="duration"
+                        name="duration"
+                        required
+                    >
+
+                        <option value="">
+                            Select Duration
+                        </option>
+
+                        <option value="24 Hours">
+                            24 Hours
+                        </option>
+
+                        <option value="7 Days">
+                            7 Days
+                        </option>
+
+                        <option value="30 Days">
+                            30 Days
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="request-button"
+                >
+                    📤 Send Access Request
+                </button>
+
+            </form>
+
+        </div>
+
+        {% endif %}
+
+
+        <!-- REQUEST HISTORY -->
+
+        <div class="card">
+
+            {% if session.get('role') == 'owner' %}
+
+                <h2>Incoming Requests</h2>
+
+                <p class="description">
+                    Organizations requesting access to your documents.
+                </p>
+
+            {% else %}
+
+                <h2>My Access Requests</h2>
+
+                <p class="description">
+                    Track the status of access requests submitted by you.
+                </p>
+
+            {% endif %}
+
+
+            {% if requests %}
+
+                <div class="table-container">
+
+                    <table class="request-table">
+
+                        <thead>
+
+                            <tr>
+
+                                {% if session.get('role') == 'owner' %}
+                                    <th>Organization</th>
+                                {% else %}
+                                    <th>Document Owner</th>
+                                {% endif %}
+
+                                <th>Document</th>
+
+                                <th>Purpose</th>
+
+                                <th>Permission</th>
+
+                                <th>Duration</th>
+
+                                <th>Status</th>
+
+                                <th>Access</th>
+
+                                <th>Action</th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody>
+
+                            {% for req in requests %}
+
+                            <tr>
+
+                                <!-- ORGANIZATION / OWNER -->
+
+                                <td>
+
+                                    {% if session.get('role') == 'owner' %}
+
+                                        <strong>
+                                            {{ req[1] }}
+                                        </strong>
+
+                                    {% else %}
+
+                                        <strong>
+                                            {{ req[10] if req|length > 10 else 'Data Owner' }}
+                                        </strong>
+
+                                    {% endif %}
+
+                                </td>
+
+
+                                <!-- DOCUMENT -->
+
+                                <td>
+                                    {{ req[2] }}
+                                </td>
+
+
+                                <!-- PURPOSE -->
+
+                                <td>
+                                    {{ req[3] }}
+                                </td>
+
+
+                                <!-- PERMISSION -->
+
+                                <td>
+                                    {{ req[4] }}
+                                </td>
+
+
+                                <!-- DURATION -->
+
+                                <td>
+                                    {{ req[5] }}
+                                </td>
+
+
+                                <!-- STATUS -->
+
+                                <td>
+
+                                    {% if req[6] == 'Pending' %}
+
+                                        <span class="status pending">
+                                            Pending
+                                        </span>
+
+                                    {% elif req[6] == 'Approved' %}
+
+                                        <span class="status approved">
+                                            Approved
+                                        </span>
+
+                                    {% elif req[6] == 'Rejected' %}
+
+                                        <span class="status rejected">
+                                            Rejected
+                                        </span>
+
+                                    {% elif req[6] == 'Revoked' %}
+
+                                        <span class="status revoked">
+                                            Revoked
+                                        </span>
+
+                                    {% elif req[6] == 'Expired' %}
+
+                                        <span class="status expired">
+                                            Expired
+                                        </span>
+
+                                    {% else %}
+
+                                        <span class="status">
+                                            {{ req[6] }}
+                                        </span>
+
+                                    {% endif %}
+
+
+                                    {% if req[7] %}
+
+                                        <div
+                                            style="
+                                                margin-top: 7px;
+                                                font-size: 12px;
+                                                color: #6b7280;
+                                            "
+                                        >
+
+                                            Approved:
+                                            {{ req[7] }}
+
+                                            {% if req[8] %}
+
+                                                <br>
+
+                                                Expires:
+                                                {{ req[8] }}
+
+                                            {% endif %}
+
+                                        </div>
+
+                                    {% endif %}
+
+                                </td>
+
+
+                                <!-- ACCESS -->
+
+                                <td>
+
+                                    {% if req[6] == 'Approved' and req[9] %}
+
+                                        <a
+                                            href="{{ url_for('uploaded_file', filename=req[9]) }}"
+                                            class="open-button"
+                                        >
+                                            🔓 Open
+                                        </a>
+
+                                    {% elif req[6] == 'Approved' %}
+
+                                        <span style="color:#6b7280;">
+                                            Available
+                                        </span>
+
+                                    {% else %}
+
+                                        <span style="color:#9ca3af;">
+                                            —
+                                        </span>
+
+                                    {% endif %}
+
+                                </td>
+
+
+                                <!-- ACTION -->
+
+                                <td>
+
+                                    {% if session.get('role') == 'owner' %}
+
+                                        {% if req[6] == 'Pending' %}
+
+                                            <form
+                                                method="POST"
+                                                action="/approve-request/{{ req[0] }}"
+                                                class="action-form"
+                                            >
+
+                                                <button
+                                                    type="submit"
+                                                    class="action-button approve"
+                                                >
+                                                    ✓ Approve
+                                                </button>
+
+                                            </form>
+
+
+                                            <form
+                                                method="POST"
+                                                action="/reject-request/{{ req[0] }}"
+                                                class="action-form"
+                                            >
+
+                                                <button
+                                                    type="submit"
+                                                    class="action-button reject"
+                                                >
+                                                    ✕ Reject
+                                                </button>
+
+                                            </form>
+
+                                        {% elif req[6] == 'Approved' %}
+
+                                            <form
+                                                method="POST"
+                                                action="/revoke-request/{{ req[0] }}"
+                                                class="action-form"
+                                            >
+
+                                                <button
+                                                    type="submit"
+                                                    class="action-button revoke"
+                                                >
+                                                    Revoke
+                                                </button>
+
+                                            </form>
+
+                                        {% else %}
+
+                                            <span style="color:#9ca3af;">
+                                                —
+                                            </span>
+
+                                        {% endif %}
+
+                                    {% else %}
+
+                                        <span style="color:#9ca3af;">
+                                            —
+                                        </span>
+
+                                    {% endif %}
+
+                                </td>
+
+                            </tr>
+
+                            {% endfor %}
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            {% else %}
+
+                <div class="empty">
+
+                    <div class="empty-icon">
+                        📭
+                    </div>
+
+                    {% if session.get('role') == 'owner' %}
+
+                        <h3>No incoming requests</h3>
+
+                        <p>
+                            Access requests from organizations will
+                            appear here.
+                        </p>
+
+                    {% else %}
+
+                        <h3>No access requests yet</h3>
+
+                        <p>
+                            Your submitted requests will appear here.
+                        </p>
+
+                    {% endif %}
+
+                </div>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+
+    <!-- DOCUMENT FILTER -->
+
+    <script>
+
+        const ownerSelect = document.getElementById("owner_id");
+        const documentSelect = document.getElementById("document_id");
+
+        if (ownerSelect && documentSelect) {
+
+            function filterDocuments() {
+
+                const selectedOwner = ownerSelect.value;
+
+                const options = documentSelect.querySelectorAll("option");
+
+                options.forEach(function(option) {
+
+                    if (option.value === "") {
+                        option.style.display = "block";
+                        return;
+                    }
+
+                    const documentOwner = option.getAttribute("data-owner");
+
+                    if (
+                        selectedOwner === "" ||
+                        documentOwner === selectedOwner
+                    ) {
+
+                        option.style.display = "block";
+
+                    } else {
+
+                        option.style.display = "none";
+
+                        if (documentSelect.value === option.value) {
+                            documentSelect.value = "";
+                        }
+
+                    }
+
+                });
+
+            }
+
+            ownerSelect.addEventListener(
+                "change",
+                filterDocuments
+            );
+
+            filterDocuments();
+
+        }
+
+    </script>
+
+</body>
+
+</html>

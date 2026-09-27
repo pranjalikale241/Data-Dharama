@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Activity History | Data Dharma</title>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Segoe UI", Arial, sans-serif;
+        }
+
+        body {
+            background: #f5f7fb;
+            color: #1e293b;
+            display: flex;
+            min-height: 100vh;
+        }
+
+
+        /* =========================
+           SIDEBAR
+        ========================= */
+
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 285px;
+            height: 100vh;
+            background: #101827;
+            color: white;
+            padding: 25px 22px;
+            display: flex;
+            flex-direction: column;
+            z-index: 1000;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 5px 10px 52px;
+        }
+
+        .brand-icon {
+            width: 45px;
+            height: 45px;
+            background: #2563eb;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+        }
+
+        .brand-text h2 {
+            font-size: 21px;
+            font-weight: 700;
+            color: white;
+        }
+
+        .brand-text p {
+            font-size: 11px;
+            color: #94a3b8;
+            margin-top: 3px;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .nav-title {
+            font-size: 11px;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin: 0 14px 16px;
+        }
+
+        .nav-menu {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .nav-menu a {
+            text-decoration: none;
+            color: #dbe4f0;
+            padding: 13px 14px;
+            border-radius: 11px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            font-size: 16px;
+            transition: 0.2s ease;
+        }
+
+        .nav-menu a:hover {
+            background: #1e293b;
+            color: white;
+        }
+
+        .nav-menu a.active {
+            background: #2563eb;
+            color: white;
+            box-shadow: 0 5px 15px rgba(37, 99, 235, 0.25);
+        }
+
+        .nav-icon {
+            width: 22px;
+            text-align: center;
+            font-size: 17px;
+        }
+
+        .information-section {
+            margin-top: 40px;
+        }
+
+
+        /* =========================
+           MAIN CONTENT
+        ========================= */
+
+        .main {
+            flex: 1;
+            margin-left: 285px;
+            padding: 30px 40px;
+            overflow-x: hidden;
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 35px;
+        }
+
+        .topbar h1 {
+            font-size: 28px;
+            color: #111827;
+        }
+
+        .topbar p {
+            color: #64748b;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        .profile {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .profile-icon {
+            width: 42px;
+            height: 42px;
+            background: #dbeafe;
+            color: #1d4ed8;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .profile span {
+            font-size: 13px;
+            color: #64748b;
+        }
+
+
+        /* =========================
+           ACTIVITY CONTENT
+        ========================= */
+
+        .page-banner {
+            background: linear-gradient(115deg, #1d4ed8, #3b82f6);
+            color: white;
+            padding: 28px;
+            border-radius: 16px;
+            margin-bottom: 28px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .page-banner h2 {
+            font-size: 23px;
+            margin-bottom: 8px;
+        }
+
+        .page-banner p {
+            color: #dbeafe;
+            font-size: 14px;
+            line-height: 1.6;
+            max-width: 600px;
+        }
+
+        .banner-icon {
+            font-size: 65px;
+        }
+
+        .box {
+            background: white;
+            padding: 28px;
+            border-radius: 14px;
+            border: 1px solid #e5e7eb;
+            box-shadow: 0 3px 12px rgba(15, 23, 42, 0.03);
+        }
+
+        .box h2 {
+            font-size: 19px;
+            color: #111827;
+            margin-bottom: 20px;
+        }
+
+        .activity {
+            padding: 18px 0;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .activity:last-child {
+            border-bottom: none;
+        }
+
+        .action {
+            font-weight: 600;
+            font-size: 16px;
+            color: #111827;
+            margin-bottom: 6px;
+        }
+
+        .details {
+            color: #64748b;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 45px 10px;
+            color: #94a3b8;
+        }
+
+        .empty-state div {
+            font-size: 40px;
+            margin-bottom: 12px;
+        }
+
+        .empty-state p {
+            font-size: 13px;
+        }
+
+        .footer {
+            text-align: center;
+            color: #94a3b8;
+            font-size: 12px;
+            margin-top: 35px;
+            padding-bottom: 10px;
+        }
+
+
+        /* =========================
+           RESPONSIVE
+        ========================= */
+
+        @media (max-width: 950px) {
+
+            .sidebar {
+                width: 245px;
+            }
+
+            .main {
+                margin-left: 245px;
+                padding: 25px;
+            }
+
+        }
+
+        @media (max-width: 600px) {
+
+            body {
+                display: block;
+            }
+
+            .sidebar {
+                position: relative;
+                width: 100%;
+                height: auto;
+                min-height: auto;
+                padding: 18px;
+            }
+
+            .brand {
+                padding-bottom: 20px;
+            }
+
+            .nav-title {
+                display: none;
+            }
+
+            .nav-menu {
+                flex-direction: row;
+                flex-wrap: wrap;
+            }
+
+            .nav-menu a {
+                display: inline-flex;
+                margin-right: 5px;
+            }
+
+            .information-section {
+                margin-top: 15px;
+            }
+
+            .main {
+                margin-left: 0;
+                padding: 20px;
+            }
+
+            .page-banner {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+
+            .banner-icon {
+                display: none;
+            }
+
+            .profile {
+                display: none;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =========================
+     SIDEBAR
+========================= -->
+
+<aside class="sidebar">
+
+    <div class="brand">
+
+        <div class="brand-icon">
+            🔐
+        </div>
+
+        <div class="brand-text">
+
+            <h2>Data Dharma</h2>
+
+            <p>Privacy Management</p>
+
+        </div>
+
+    </div>
+
+
+    <div class="nav-title">
+        Main Menu
+    </div>
+
+
+    <nav class="nav-menu">
+
+
+        <!-- Dashboard -->
+
+        <a href="/">
+            <span class="nav-icon">▦</span>
+            Dashboard
+        </a>
+
+
+        <!-- DATA OWNER MENU -->
+
+        {% if session["role"] == "owner" %}
+
+            <a href="/vault">
+                <span class="nav-icon">📁</span>
+                Data Vault
+            </a>
+
+
+            <a href="/access-requests">
+                <span class="nav-icon">🔐</span>
+                Access Requests
+            </a>
+
+
+            <a href="/risk-analysis">
+                <span class="nav-icon">🤖</span>
+                Risk Analysis
+            </a>
+
+
+            <a href="/activity" class="active">
+                <span class="nav-icon">📋</span>
+                Activity History
+            </a>
+
+
+        <!-- ORGANIZATION MENU -->
+
+        {% else %}
+
+            <a href="/search-owners">
+                <span class="nav-icon">🔎</span>
+                Search Data Owners
+            </a>
+
+
+            <a href="/access-requests">
+                <span class="nav-icon">📋</span>
+                My Requests
+            </a>
+
+
+            <a href="/activity" class="active">
+                <span class="nav-icon">📊</span>
+                Activity History
+            </a>
+
+        {% endif %}
+
+    </nav>
+
+
+    <!-- INFORMATION -->
+
+    <div class="information-section">
+
+        <div class="nav-title">
+            Information
+        </div>
+
+
+        <nav class="nav-menu">
+
+            <a href="/#about">
+
+                <span class="nav-icon">
+                    ℹ️
+                </span>
+
+                About Data Dharma
+
+            </a>
+
+        </nav>
+
+    </div>
+
+</aside>
+
+
+<!-- =========================
+     MAIN CONTENT
+========================= -->
+
+<main class="main">
+
+
+    <div class="topbar">
+
+        <div>
+
+            <h1>Activity History</h1>
+
+            <p>
+                Track activity related to your personal data.
+            </p>
+
+        </div>
+
+
+        <div class="profile">
+
+            <div>
+
+                <strong style="font-size: 14px;">
+                    {{ session.get("username", "User") }}
+                </strong>
+
+                <br>
+
+                <span>
+                    {{ session.get("role", "Account")|title }}
+                </span>
+
+            </div>
+
+
+            <div class="profile-icon">
+
+                {{ session.get("username", "U")[0]|upper }}
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- BANNER -->
+
+    <section class="page-banner">
+
+        <div>
+
+            <h2>
+                Your Activity, Clearly Tracked.
+            </h2>
+
+            <p>
+                Review actions and events related to your
+                Data Dharma account and personal data.
+            </p>
+
+        </div>
+
+
+        <div class="banner-icon">
+            📋
+        </div>
+
+    </section>
+
+
+    <!-- ACTIVITY BOX -->
+
+    <div class="box">
+
+        <h2>
+            🕒 Recent Activity
+        </h2>
+
+
+        {% if activities %}
+
+            {% for activity in activities %}
+
+                <div class="activity">
+
+                    <p class="action">
+                        {{ activity[1] }}
+                    </p>
+
+                    <p class="details">
+                        {{ activity[2] }}
+                    </p>
+
+                </div>
+
+            {% endfor %}
+
+        {% else %}
+
+            <div class="empty-state">
+
+                <div>
+                    📭
+                </div>
+
+                <p>
+                    No activity recorded yet.
+                </p>
+
+            </div>
+
+        {% endif %}
+
+    </div>
+
+
+    <div class="footer">
+
+        Data Dharma © 2026 |
+        Privacy-First Personal Data Management
+
+    </div>
+
+
+</main>
+
+
+</body>
+
+</html>
